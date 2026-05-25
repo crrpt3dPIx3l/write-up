@@ -1,0 +1,99 @@
+
+ARM64 (AArch64) Assembly Quick Notes
+===================================
+
+1. mov — Move
+Copies a value into a register.
+Example:
+  mov x0, x1    ; x0 = x1
+  mov x0, #5    ; x0 = 5
+
+2. add — Addition
+Adds two values.
+Example:
+  add x0, x1, x2   ; x0 = x1 + x2
+  add x0, x0, #1   ; increment
+
+3. sub — Subtraction
+Subtracts one value from another.
+Example:
+  sub x0, x1, x2
+  sub sp, sp, #16  ; allocate stack space
+
+4. ldr — Load Register
+Loads data from memory into a register.
+Example:
+  ldr x0, [x1]
+  ldr w0, [sp, #4]
+
+5. str — Store Register
+Stores data from a register into memory.
+Example:
+  str x0, [x1]
+  str w0, [sp, #8]
+
+6. cmp — Compare
+Compares two values and sets condition flags.
+Example:
+  cmp x0, x1
+  cmp x0, #0
+
+7. b — Branch
+Unconditional jump.
+Example:
+  b loop
+
+8. bl — Branch with Link
+Calls a function, saves return address in x30 (lr).
+Example:
+  bl printf
+
+9. ret — Return
+Returns from function using x30.
+Example:
+  ret
+
+10. bls — Branch if Lower or Same
+Conditional branch (unsigned <=).
+Example:
+  cmp x0, x1
+  bls label
+
+11. stp — Store Pair
+Stores two registers at once.
+Example:
+  stp x29, x30, [sp, #-16]!
+
+12. ldp — Load Pair
+Loads two registers at once.
+Example:
+  ldp x29, x30, [sp], #16
+
+13. adrp — Address of Page
+Loads page-aligned base address.
+Example:
+  adrp x0, symbol
+  add  x0, x0, :lo12:symbol
+
+Common Register Usage
+---------------------
+x0–x7   : Function arguments / return values
+x29     : Frame pointer
+x30     : Link register (return address)
+sp      : Stack pointer
+
+Typical Function Structure
+--------------------------
+Prologue:
+  stp x29, x30, [sp, #-16]!
+  mov x29, sp
+
+Epilogue:
+  ldp x29, x30, [sp], #16
+  ret
+
+CTF Tip:
+--------
+- cmp + bXX = if condition
+- ldr/str = memory access
+- bl = function call
